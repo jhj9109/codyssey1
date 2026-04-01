@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    
+    <title>엔진엑스에 온걸 환영해!</title>
+    <style>
+        html {
+            color-scheme: light dark;
+        }
+
+        body {
+            width: 35em;
+            margin: 0 auto;
+            font-family: Tahoma, Verdana, Arial, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>환영한다.</h1>
+    <p>Nginx 컨테이너가 서빙하는 정적 페이지입니다.</p>
+    
+    <div class="counter-box">
+        <p>🎉 총 방문자 수: <strong id="visit-count">로딩 중...</strong></p>
+    </div>
+
+    <script>
+        // 브라우저가 이 페이지를 다 읽으면 즉시 실행됩니다.
+        window.onload = async () => {
+            try {
+                // Nginx를 거쳐 Express 컨테이너로 전달될 API를 호출합니다.
+                const response = await fetch('/api/visit');
+                const data = await response.json();
+                
+                // 받아온 방문자 숫자를 HTML 태그 안에 쏙 끼워 넣습니다.
+                document.getElementById('visit-count').innerText = data.visit_count + "명";
+            } catch (error) {
+                console.error("API 호출 에러:", error);
+                document.getElementById('visit-count').innerText = "집계 불가 (서버 에러)";
+            }
+        };
+    </script>
+</body>
+
+</html>
